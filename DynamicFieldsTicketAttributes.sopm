@@ -11,10 +11,13 @@
         <File Permission="660" Location="Kernel/Config/Files/XML/DynamicFieldsTicketAttributes.xml" />
         <File Permission="660" Location="Kernel/Modules/AdminDynamicFieldQueue.pm" />
         <File Permission="660" Location="Kernel/Modules/AdminDynamicFieldSLA.pm" />
+        <File Permission="660" Location="Kernel/Modules/AdminDynamicFieldType.pm" />
         <File Permission="660" Location="Kernel/Output/HTML/Templates/Standard/AdminDynamicFieldQueue.tt" />
         <File Permission="660" Location="Kernel/Output/HTML/Templates/Standard/AdminDynamicFieldSLA.tt" />
+        <File Permission="660" Location="Kernel/Output/HTML/Templates/Standard/AdminDynamicFieldType.tt" />
         <File Permission="660" Location="Kernel/System/DynamicField/Driver/Queue.pm" />
         <File Permission="660" Location="Kernel/System/DynamicField/Driver/SLA.pm" />
+        <File Permission="660" Location="Kernel/System/DynamicField/Driver/Type.pm" />
     </Filelist>
 </otobo_package>
 
