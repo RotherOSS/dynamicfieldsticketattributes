@@ -1,7 +1,7 @@
 # --
 # OTOBO is a web-based ticketing system for service organisations.
 # --
-# Copyright (C) 2019-2024 Rother OSS GmbH, https://otobo.de/
+# Copyright (C) 2019-2025 Rother OSS GmbH, https://otobo.io/
 # --
 # This program is free software: you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free Software
@@ -33,8 +33,8 @@ use parent qw(Kernel::System::DynamicField::Driver::BaseEntity);
 
 our @ObjectDependencies = (
     'Kernel::Config',
-    'Kernel::System::GeneralCatalog',
     'Kernel::System::Main',
+    'Kernel::System::SLA',
 );
 
 =head1 NAME
@@ -206,8 +206,6 @@ sub ReadableValueRender {
         Title => $Title,
     };
 }
-
-use Data::Dumper;
 
 sub PossibleValuesGet {
     my ( $Self, %Param ) = @_;
