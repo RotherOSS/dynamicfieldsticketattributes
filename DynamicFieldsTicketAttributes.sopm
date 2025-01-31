@@ -8,8 +8,17 @@
     <License>GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007</License>
     <Description Lang="en">Provides additional dynamic field types.</Description>
     <Filelist>
-        <File Permission="660" Location="Kernel/System/DynamicField/Driver/Service.pm" />
         <File Permission="660" Location="Kernel/Config/Files/XML/DynamicFieldsTicketAttributes.xml" />
+        <File Permission="660" Location="Kernel/Modules/AdminDynamicFieldQueue.pm" />
+        <File Permission="660" Location="Kernel/Modules/AdminDynamicFieldSLA.pm" />
+        <File Permission="660" Location="Kernel/Output/HTML/Templates/Standard/AdminDynamicFieldQueue.tt" />
+        <File Permission="660" Location="Kernel/Output/HTML/Templates/Standard/AdminDynamicFieldSLA.tt" />
+        <File Permission="660" Location="Kernel/System/DynamicField/Driver/Queue.pm" />
+        <File Permission="660" Location="Kernel/System/DynamicField/Driver/SLA.pm" />
+        <File Permission="660" Location="var/httpd/htdocs/js/ITSM.Queue.js" />
+        <File Permission="660" Location="var/httpd/htdocs/js/ITSM.Queue.JSColorPicker.js" />
+        <File Permission="660" Location="var/httpd/htdocs/js/ITSM.SLA.js" />
+        <File Permission="660" Location="var/httpd/htdocs/js/ITSM.SLA.JSColorPicker.js" />
     </Filelist>
 </otobo_package>
 
