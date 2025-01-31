@@ -15,10 +15,6 @@
         <File Permission="660" Location="Kernel/Output/HTML/Templates/Standard/AdminDynamicFieldSLA.tt" />
         <File Permission="660" Location="Kernel/System/DynamicField/Driver/Queue.pm" />
         <File Permission="660" Location="Kernel/System/DynamicField/Driver/SLA.pm" />
-        <File Permission="660" Location="var/httpd/htdocs/js/ITSM.Queue.js" />
-        <File Permission="660" Location="var/httpd/htdocs/js/ITSM.Queue.JSColorPicker.js" />
-        <File Permission="660" Location="var/httpd/htdocs/js/ITSM.SLA.js" />
-        <File Permission="660" Location="var/httpd/htdocs/js/ITSM.SLA.JSColorPicker.js" />
     </Filelist>
 </otobo_package>
 
