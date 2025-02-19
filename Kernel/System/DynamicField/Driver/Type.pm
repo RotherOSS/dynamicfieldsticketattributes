@@ -86,127 +86,6 @@ sub new {
     return $Self;
 }
 
-sub DisplayValueRender {
-    my ( $Self, %Param ) = @_;
-
-    # activate HTMLOutput when it wasn't specified
-    my $HTMLOutput = $Param{HTMLOutput} // 1;
-
-    # get raw Value strings from field value
-    my @Values = !ref $Param{Value}
-        ? ( $Param{Value} )
-        : scalar $Param{Value}->@* ? $Param{Value}->@*
-        :                            ('');
-
-    $Param{ValueMaxChars} ||= '';
-
-    my %ItemList = $Kernel::OM->Get('Kernel::System::Type')->TypeList();
-
-    my @ReadableValues;
-    my @ReadableTitles;
-    for my $ValueItem (@Values) {
-        $ValueItem //= '';
-
-        # replace agent login with full name
-        if ($ValueItem) {
-            $ValueItem = $ItemList{$ValueItem};
-        }
-
-        # set title as value after update and before limit
-        push @ReadableTitles, $ValueItem;
-
-        # HTML Output transformation
-        if ($HTMLOutput) {
-            $ValueItem = $Param{LayoutObject}->Ascii2Html(
-                Text => $ValueItem,
-                Max  => $Param{ValueMaxChars},
-            );
-        }
-        else {
-            if ( $Param{ValueMaxChars} && length($ValueItem) > $Param{ValueMaxChars} ) {
-                $ValueItem = substr( $ValueItem, 0, $Param{ValueMaxChars} ) . '...';
-            }
-        }
-
-        push @ReadableValues, $ValueItem;
-    }
-
-    my $ValueSeparator;
-    my $Title = join( ', ', @ReadableTitles );
-
-    # HTMLOutput transformations
-    if ($HTMLOutput) {
-        $Title = $Param{LayoutObject}->Ascii2Html(
-            Text => $Title,
-            Max  => $Param{TitleMaxChars} || '',
-        );
-        $ValueSeparator = '<br/>';
-    }
-    else {
-        if ( $Param{TitleMaxChars} && length($Title) > $Param{TitleMaxChars} ) {
-            $Title = substr( $Title, 0, $Param{TitleMaxChars} ) . '...';
-        }
-        $ValueSeparator = "\n";
-    }
-
-    # return a data structure
-    return {
-        Value => join( $ValueSeparator, @ReadableValues ),
-        Title => $Title,
-        Link  => undef,                                      # this field type does not support the Link Feature
-    };
-}
-
-sub ReadableValueRender {
-    my ( $Self, %Param ) = @_;
-
-    my $Value = '';
-
-    # check value
-    my @Values;
-    if ( ref $Param{Value} eq 'ARRAY' ) {
-        @Values = @{ $Param{Value} };
-    }
-    else {
-        @Values = ( $Param{Value} );
-    }
-
-    my %ItemList = $Kernel::OM->Get('Kernel::System::Type')->TypeList();
-
-    my @ReadableValues;
-
-    for my $Item (@Values) {
-        $Item //= '';
-
-        # replace agent login with full name
-        if ($Item) {
-            $Item = $ItemList{Item};
-        }
-
-        push @ReadableValues, $Item || '';
-    }
-
-    # set new line separator
-    my $ItemSeparator = ', ';
-
-    # Output transformations
-    $Value = join( $ItemSeparator, @ReadableValues );
-    my $Title = $Value;
-
-    # prepare title
-    $Title = $Value;
-
-    if ( $Param{TitleMaxChars} && length $Title > $Param{TitleMaxChars} ) {
-        $Title = substr( $Title, 0, $Param{TitleMaxChars} ) . '...';
-    }
-
-    # return a data structure
-    return {
-        Value => $Value,
-        Title => $Title,
-    };
-}
-
 sub PossibleValuesGet {
     my ( $Self, %Param ) = @_;
 
@@ -225,7 +104,6 @@ sub PossibleValuesGet {
     if ($FieldPossibleNone) {
         $PossibleValues{''} = '-';
     }
-
     return \%PossibleValues;
 }
 
