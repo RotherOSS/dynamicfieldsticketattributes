@@ -1,0 +1,259 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2019–2026 Rother OSS GmbH, https://otobo.io
+# This file is distributed under the same license as the OTOBO Documentation package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: OTOBO Documentation dev\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-13 13:46+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../content/index.rst:5
+msgid "Contents"
+msgstr ""
+
+#: ../content/index.rst:10
+msgid "Overview"
+msgstr ""
+
+#: ../content/index.rst:12
+msgid "Summary"
+msgstr ""
+
+#: ../content/index.rst:13
+msgid "This package provides three new types of dynamic fields, namely:"
+msgstr ""
+
+#: ../content/index.rst:15
+msgid "Queue"
+msgstr ""
+
+#: ../content/index.rst:16
+msgid "SLA"
+msgstr ""
+
+#: ../content/index.rst:17
+msgid "Type (regarding ticket type)"
+msgstr ""
+
+#: ../content/index.rst:19
+msgid "This package is necessary, for example, to migrate the legacy dynamic fields QueueReference, SLAReference, and TypeReference from the legacy third-party CIAttributesColleaction package."
+msgstr ""
+
+#: ../content/index.rst:22
+msgid "Configuration"
+msgstr ""
+
+#: ../content/index.rst:25
+msgid "System requirements"
+msgstr ""
+
+#: ../content/index.rst:27
+msgid "Framework"
+msgstr ""
+
+#: ../content/index.rst:28
+msgid "OTOBO 11.0.x"
+msgstr ""
+
+#: ../content/index.rst:31
+msgid "Packages"
+msgstr ""
+
+#: ../content/index.rst:32
+#: ../content/index.rst:36
+#: ../content/index.rst:44
+msgid "Not applicable"
+msgstr ""
+
+#: ../content/index.rst:35
+msgid "Third-party software"
+msgstr ""
+
+#: ../content/index.rst:39
+msgid "Basic Configuration"
+msgstr ""
+
+#: ../content/index.rst:40
+msgid "Open the Package Manager module from the Administration group in the Agent Interface. Select the package named DynamicFieldsTicketAttributes from the Online Repository. Click the associated  *Install* link on that line and respond affirmatively to any confirmation questions that may follow."
+msgstr ""
+
+#: ../content/index.rst:43
+msgid "Custom Configuration and Advanced Features"
+msgstr ""
+
+#: ../content/index.rst:47
+msgid "Configuration Reference"
+msgstr ""
+
+#: ../content/index.rst:50
+msgid "Core::DynamicFields::DriverRegistration"
+msgstr ""
+
+#: ../content/index.rst:53
+msgid "DynamicFields::Driver###Queue"
+msgstr ""
+
+#: ../content/index.rst:54
+#: ../content/index.rst:58
+#: ../content/index.rst:62
+msgid "DynamicField backend registration."
+msgstr ""
+
+#: ../content/index.rst:57
+msgid "DynamicFields::Driver###SLA"
+msgstr ""
+
+#: ../content/index.rst:61
+msgid "DynamicFields::Driver###Type"
+msgstr ""
+
+#: ../content/index.rst:65
+msgid "Core::Queue"
+msgstr ""
+
+#: ../content/index.rst:68
+msgid "QueuePreferences###Comment2"
+msgstr ""
+
+#: ../content/index.rst:69
+#: ../content/index.rst:80
+#: ../content/index.rst:91
+msgid "Parameters for the example comment 2 of the general catalog attributes."
+msgstr ""
+
+#: ../content/index.rst:72
+msgid "QueuePreferences###Permissions"
+msgstr ""
+
+#: ../content/index.rst:73
+#: ../content/index.rst:84
+#: ../content/index.rst:95
+msgid "Parameters for the example permission groups of the general catalog attributes."
+msgstr ""
+
+#: ../content/index.rst:76
+msgid "Core::SLA"
+msgstr ""
+
+#: ../content/index.rst:79
+msgid "SLAPreferences###Comment2"
+msgstr ""
+
+#: ../content/index.rst:83
+msgid "SLAPreferences###Permissions"
+msgstr ""
+
+#: ../content/index.rst:87
+msgid "Core::Type"
+msgstr ""
+
+#: ../content/index.rst:90
+msgid "TypePreferences###Comment2"
+msgstr ""
+
+#: ../content/index.rst:94
+msgid "TypePreferences###Permissions"
+msgstr ""
+
+#: ../content/index.rst:98
+msgid "Frontend::Admin::ModuleRegistration"
+msgstr ""
+
+#: ../content/index.rst:101
+msgid "Frontend::Module###AdminDynamicFieldQueue"
+msgstr ""
+
+#: ../content/index.rst:102
+#: ../content/index.rst:106
+#: ../content/index.rst:110
+msgid "Frontend module registration for the agent interface."
+msgstr ""
+
+#: ../content/index.rst:105
+msgid "Frontend::Module###AdminDynamicFieldSLA"
+msgstr ""
+
+#: ../content/index.rst:109
+msgid "Frontend::Module###AdminDynamicFieldType"
+msgstr ""
+
+#: ../content/index.rst:113
+msgid "Frontend::Admin::ModuleRegistration::Loader"
+msgstr ""
+
+#: ../content/index.rst:116
+msgid "Loader::Module::AdminDynamicFieldSLA###002-Ticket"
+msgstr ""
+
+#: ../content/index.rst:117
+#: ../content/index.rst:121
+#: ../content/index.rst:125
+msgid "Loader module registration for the agent interface."
+msgstr ""
+
+#: ../content/index.rst:120
+msgid "Loader::Module::AdminDynamicFieldQueue###002-Ticket"
+msgstr ""
+
+#: ../content/index.rst:124
+msgid "Loader::Module::AdminDynamicFieldType###002-Ticket"
+msgstr ""
+
+#: ../content/index.rst:128
+msgid "Frontend::Base::Loader"
+msgstr ""
+
+#: ../content/index.rst:131
+msgid "Loader::Agent::CommonJS###100-Queue"
+msgstr ""
+
+#: ../content/index.rst:132
+#: ../content/index.rst:136
+#: ../content/index.rst:140
+msgid "List of JS files to always be loaded for the agent interface."
+msgstr ""
+
+#: ../content/index.rst:135
+msgid "Loader::Agent::CommonJS###100-SLA"
+msgstr ""
+
+#: ../content/index.rst:139
+msgid "Loader::Agent::CommonJS###100-Type"
+msgstr ""
+
+#: ../content/index.rst:143
+msgid "About"
+msgstr ""
+
+#: ../content/index.rst:146
+msgid "Contact"
+msgstr ""
+
+#: ../content/index.rst:147
+msgid "Rother OSS GmbH"
+msgstr ""
+
+#: ../content/index.rst:148
+msgid "Email: hello@otobo.io"
+msgstr ""
+
+#: ../content/index.rst:149
+msgid "Web: https://otobo.io"
+msgstr ""
+
+#: ../content/index.rst:152
+msgid "Version"
+msgstr ""
+
+#: ../content/index.rst:153
+msgid "Author: |doc-vendor| / Version: |doc-version| / Date of release: |doc-datestamp|"
+msgstr ""
