@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <otobo_package version="1.0">
-    <Name>DynamicFieldTicketsAttributes</Name>
+    <Name>DynamicFieldsTicketAttributes</Name>
     <Version>0.0.0</Version>
     <Framework>11.0.x</Framework>
     <Vendor>Rother OSS GmbH</Vendor>
@@ -20,4 +20,3 @@
         <File Permission="660" Location="Kernel/System/DynamicField/Driver/Type.pm" />
     </Filelist>
 </otobo_package>
-
