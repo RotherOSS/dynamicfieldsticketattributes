@@ -19,5 +19,7 @@
         <File Permission="660" Location="Kernel/System/DynamicField/Driver/SLA.pm" />
         <File Permission="660" Location="Kernel/System/DynamicField/Driver/Type.pm" />
     </Filelist>
+    <!-- fix previous typo in package name -->
+    <PackageMerge Name="DynamicFieldTicketsAttributes" TargetVersion="11.0.1"></PackageMerge>
 </otobo_package>
 
