@@ -2,7 +2,7 @@
 # OTOBO is a web-based ticketing system for service organisations.
 # --
 # Copyright (C) 2001-2020 OTRS AG, https://otrs.com/
-# Copyright (C) 2019-2024 Rother OSS GmbH, https://otobo.de/
+# Copyright (C) 2019-2026 Rother OSS GmbH, https://otobo.io/
 # --
 # This program is free software: you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free Software
@@ -106,7 +106,7 @@ sub _Add {
     my %GetParam;
 
     # check if we clone from an existing field
-    my $CloneFieldID = $ParamObject->GetParam( Param => "ID" );
+    my $CloneFieldID = $ParamObject->GetParam( Param => "CloneFieldID" );
     if ($CloneFieldID) {
         my $FieldConfig = $Kernel::OM->Get('Kernel::System::DynamicField')->DynamicFieldGet(
             ID => $CloneFieldID,
@@ -126,14 +126,22 @@ sub _Add {
                 next CONFIGKEY if $ConfigKey eq 'PartOfSet';
 
                 my $DFDetails = $FieldConfig->{Config};
-                $GetParam{$ConfigKey} = $DFDetails->{$ConfigKey};
+                if ( IsHashRefWithData( $DFDetails->{$ConfigKey} ) ) {
+                    my $ConfigContent = $DFDetails->{$ConfigKey};
+                    for my $ContentKey ( keys $ConfigContent->%* ) {
+                        $GetParam{$ContentKey} = $ConfigContent->{$ContentKey};
+                    }
+                }
+                else {
+                    $GetParam{$ConfigKey} = $DFDetails->{$ConfigKey};
+                }
             }
         }
         $GetParam{CloneFieldID} = $CloneFieldID;
     }
 
     for my $Needed (qw(ObjectType FieldType FieldOrder)) {
-        $GetParam{$Needed} //= $Kernel::OM->Get('Kernel::System::Web::Request')->GetParam( Param => $Needed );
+        $GetParam{$Needed} //= $ParamObject->GetParam( Param => $Needed );
         if ( !$GetParam{$Needed} ) {
             return $LayoutObject->ErrorScreen(
                 Message => $LayoutObject->{LanguageObject}->Translate( 'Need %s', $Needed ),
@@ -141,7 +149,7 @@ sub _Add {
         }
     }
 
-    for my $FilterParam (qw(ObjectTypeFilter NamespaceFilter)) {
+    for my $FilterParam (qw(ObjectTypeFilter FieldTypeFilter NamespaceFilter)) {
         $GetParam{$FilterParam} = $ParamObject->GetParam( Param => $FilterParam );
     }
 
@@ -177,10 +185,12 @@ sub _Add {
     my $FieldTypeName  = $ConfigObject->Get('DynamicFields::Driver')->{ $GetParam{FieldType} }->{DisplayName}      || '';
 
     # check namespace validity
-    my $Namespaces = $ConfigObject->Get('DynamicField::Namespaces');
-    my $Namespace  = '';
-    if ( IsArrayRefWithData($Namespaces) && $GetParam{NamespaceFilter} ) {
-        $Namespace = ( grep { $_ eq $GetParam{NamespaceFilter} } $Namespaces->@* ) ? $GetParam{NamespaceFilter} : '';
+    my @DFNamespaces = $Kernel::OM->Get('Kernel::System::Namespace')->NamespacesList(
+        Scope => 'DynamicField',
+    );
+    my $Namespace = '';
+    if ( @DFNamespaces && $GetParam{NamespaceFilter} ) {
+        $Namespace = ( grep { $_ eq $GetParam{NamespaceFilter} } @DFNamespaces ) ? $GetParam{NamespaceFilter} : '';
     }
 
     return $Self->_ShowScreen(
@@ -190,6 +200,7 @@ sub _Add {
         BreadcrumbText => $LayoutObject->{LanguageObject}->Translate( 'Add %s field', $LayoutObject->{LanguageObject}->Translate($FieldTypeName) ),
         ObjectTypeName => $ObjectTypeName,
         FieldTypeName  => $FieldTypeName,
+        Namespace      => $Namespace,
     );
 }
 
@@ -256,7 +267,7 @@ sub _AddAction {
         $GetParam{$ConfigParam} = $ParamObject->GetParam( Param => $ConfigParam );
     }
 
-    for my $FilterParam (qw(ObjectTypeFilter NamespaceFilter)) {
+    for my $FilterParam (qw(ObjectTypeFilter FieldTypeFilter NamespaceFilter)) {
         $GetParam{$FilterParam} = $ParamObject->GetParam( Param => $FilterParam );
     }
 
@@ -365,6 +376,14 @@ sub _AddAction {
             },
         );
     }
+    if ( IsStringWithData( $GetParam{FieldTypeFilter} ) ) {
+        $RedirectString .= ";FieldTypeFilter=" . $LayoutObject->Output(
+            Template => '[% Data.Filter | uri %]',
+            Data     => {
+                Filter => $GetParam{FieldTypeFilter},
+            },
+        );
+    }
     if ( IsStringWithData( $GetParam{NamespaceFilter} ) ) {
         $RedirectString .= ";NamespaceFilter=" . $LayoutObject->Output(
             Template => '[% Data.Filter | uri %]',
@@ -393,7 +412,7 @@ sub _Change {
         }
     }
 
-    for my $FilterParam (qw(ObjectTypeFilter NamespaceFilter)) {
+    for my $FilterParam (qw(ObjectTypeFilter FieldTypeFilter NamespaceFilter)) {
         $GetParam{$FilterParam} = $ParamObject->GetParam( Param => $FilterParam );
     }
 
@@ -525,7 +544,7 @@ sub _ChangeAction {
         $GetParam{$ConfigParam} = $ParamObject->GetParam( Param => $ConfigParam );
     }
 
-    for my $FilterParam (qw(ObjectTypeFilter NamespaceFilter)) {
+    for my $FilterParam (qw(ObjectTypeFilter FieldTypeFilter NamespaceFilter)) {
         $GetParam{$FilterParam} = $ParamObject->GetParam( Param => $FilterParam );
     }
 
@@ -715,6 +734,14 @@ sub _ChangeAction {
             },
         );
     }
+    if ( IsStringWithData( $GetParam{FieldTypeFilter} ) ) {
+        $FilterString .= ";FieldTypeFilter=" . $LayoutObject->Output(
+            Template => '[% Data.Filter | uri %]',
+            Data     => {
+                Filter => $GetParam{FieldTypeFilter},
+            },
+        );
+    }
     if ( IsStringWithData( $GetParam{NamespaceFilter} ) ) {
         $FilterString .= ";NamespaceFilter=" . $LayoutObject->Output(
             Template => '[% Data.Filter | uri %]',
@@ -745,12 +772,15 @@ sub _ChangeAction {
 sub _ShowScreen {
     my ( $Self, %Param ) = @_;
 
+    my $Namespace = $Param{Namespace};
     $Param{DisplayFieldName} = 'New';
 
-    my $Namespace;
-    if ( $Param{Mode} eq 'Change' || ( $Param{Name} && !$Param{CloneFieldID} ) ) {
-        $Param{ShowWarning}      = 'ShowWarning';
-        $Param{DisplayFieldName} = $Param{Name};
+    if ( $Param{Mode} eq 'Change' || $Param{Name} ) {
+
+        if ( !$Param{CloneFieldID} ) {
+            $Param{ShowWarning}      = 'ShowWarning';
+            $Param{DisplayFieldName} = $Param{Name};
+        }
 
         # check for namespace
         if ( $Param{Name} =~ /(.*)-(.*)/ ) {
@@ -825,16 +855,18 @@ sub _ShowScreen {
         Class      => 'Modernize W50pc',
     );
 
-    my $NamespaceList = $Kernel::OM->Get('Kernel::Config')->Get('DynamicField::Namespaces');
-    if ( IsArrayRefWithData($NamespaceList) ) {
+    my @DFNamespaces = $Kernel::OM->Get('Kernel::System::Namespace')->NamespacesList(
+        Scope => 'DynamicField',
+    );
+    if (@DFNamespaces) {
         my $NamespaceStrg = $LayoutObject->BuildSelection(
-            Data          => $NamespaceList,
+            Data          => \@DFNamespaces,
             Name          => 'Namespace',
             SelectedValue => $Namespace || '',
             PossibleNone  => 1,
             Translation   => 0,
             Sort          => 'AlphanumericValue',
-            Class         => 'Modernize W50pc',
+            Class         => 'Modernize W75pc',
         );
 
         $LayoutObject->Block(
@@ -947,13 +979,25 @@ sub _ShowScreen {
             },
         );
     }
-    if ( IsStringWithData( $Param{NamespaceFilter} ) ) {
-        $FilterStrg .= ";NamespaceFilter=" . $LayoutObject->Output(
+
+    if ( IsStringWithData( $Param{FieldTypeFilter} ) ) {
+        $FilterStrg .= ";FieldTypeFilter=" . $LayoutObject->Output(
             Template => '[% Data.Filter | uri %]',
             Data     => {
-                Filter => $Param{NamespaceFilter},
+                Filter => $Param{FieldTypeFilter},
             },
         );
+    }
+
+    if (@DFNamespaces) {
+        if ( IsStringWithData( $Param{NamespaceFilter} ) ) {
+            $FilterStrg .= ";NamespaceFilter=" . $LayoutObject->Output(
+                Template => '[% Data.Filter | uri %]',
+                Data     => {
+                    Filter => $Param{NamespaceFilter},
+                },
+            );
+        }
     }
 
     # generate output
@@ -961,13 +1005,13 @@ sub _ShowScreen {
         TemplateFile => 'AdminDynamicFieldSLA',
         Data         => {
             %Param,
-            FilterStrg              => $FilterStrg,
-            ValidityStrg            => $ValidityStrg,
-            DynamicFieldOrderStrg   => $DynamicFieldOrderStrg,
-            MultiValueStrg          => $MultiValueStrg,
-            PossibleNoneStrg        => $PossibleNoneStrg,
-            ReadonlyInternalField   => $ReadonlyInternalField,
-            Tooltip                 => $Tooltip,
+            FilterStrg            => $FilterStrg,
+            ValidityStrg          => $ValidityStrg,
+            DynamicFieldOrderStrg => $DynamicFieldOrderStrg,
+            MultiValueStrg        => $MultiValueStrg,
+            PossibleNoneStrg      => $PossibleNoneStrg,
+            ReadonlyInternalField => $ReadonlyInternalField,
+            Tooltip               => $Tooltip,
         }
     );
 
